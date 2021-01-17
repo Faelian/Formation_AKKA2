@@ -15,7 +15,7 @@ Pour ce TP nous utiliserons la machine __OWASP Broken Web Apps__ que vous avez d
 
 __[https://pentesterlab.com/exercises/from_sqli_to_shell/iso](https://pentesterlab.com/exercises/from_sqli_to_shell/iso)__
 
-## SQL
+## Rappel SQL
 
 SQL est un langage de requêtes de base de données.
 
@@ -163,3 +163,17 @@ mysql> SELECT ID, username FROM users;
 ```
 
 Note : il n'est pas nécessaire de mettre `SELECT` et `FROM` en majuscule. Néanmoins il s'agit de la convention prise dans la plupart des cas de façon à distinguer les champs des opérateurs.
+
+On peut utiliser le mot-clé `WHERE` pour filtrer les éléments sélectionnés.
+
+```
+mysql> SELECT password FROM users WHERE username = 'admin';
++----------------------------------+
+| password                         |
++----------------------------------+
+| 21232f297a57a5a743894a0e4a801fc3 |
++----------------------------------+
+1 row in set (0.00 sec)
+```
+
+__Exercice :__ Selectionner le nom de l'utilisateur avec l'ID 2.
