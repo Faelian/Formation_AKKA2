@@ -180,6 +180,8 @@ __Exercice :__ Selectionner le nom de l'utilisateur avec l'ID 2.
 
 __Exercice 2:__ Dans la base de données _sqlol_. Faire une requête qui trouve si l'utilisateur avec l'_id_ 2 est admin. Le résultat de la requête doit donner un _0_ ou un _1_.
 
+Solution : `SELECT isadmin FROM users WHERE id=2;`
+
 On peut utiliser l'opérateur __`AND`__ pour préciser plusieurs conditions.
 
 ```
@@ -198,3 +200,6 @@ __Exercice :__ Dans la table _accounts_ de la base de données _nowasp_. Faire u
 * Ne renvoie pas de données, si le couple utilisateur mot de passe n'est pas valide.
 
 Pour cela, faire une requête _WHERE_ et _AND_ qui vérifie à la fois le nom d'utilisateur et le mot de passe.
+
+Solution : `SELECT * FROM accounts WHERE username='adrian' AND password='somepassword';`
+
