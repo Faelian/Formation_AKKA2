@@ -178,4 +178,4 @@ mysql> SELECT password FROM users WHERE username = 'admin';
 
 __Exercice :__ Selectionner le nom de l'utilisateur avec l'ID 2.
 
-__Exercice 2:__Dans la base de données _sqlol_. Faire une requête qui trouve si l'utilisateur avec l'_id_ 2 est admin.
+__Exercice 2:__ Dans la base de données _sqlol_. Faire une requête qui trouve si l'utilisateur avec l'_id_ 2 est admin.
