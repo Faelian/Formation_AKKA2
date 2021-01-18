@@ -201,5 +201,8 @@ __Exercice :__ Dans la table _accounts_ de la base de données _nowasp_. Faire u
 
 Pour cela, faire une requête _WHERE_ et _AND_ qui vérifie à la fois le nom d'utilisateur et le mot de passe.
 
-Solution : `SELECT * FROM accounts WHERE username='adrian' AND password='somepassword';`
+Solution :\
+`SELECT * FROM accounts WHERE username='adrian' AND password='somepassword';`
+
+# Injection SQL
 
