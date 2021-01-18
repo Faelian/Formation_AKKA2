@@ -179,3 +179,22 @@ mysql> SELECT password FROM users WHERE username = 'admin';
 __Exercice :__ Selectionner le nom de l'utilisateur avec l'ID 2.
 
 __Exercice 2:__ Dans la base de données _sqlol_. Faire une requête qui trouve si l'utilisateur avec l'_id_ 2 est admin. Le résultat de la requête doit donner un _0_ ou un _1_.
+
+On peut utiliser l'opérateur __`AND`__ pour préciser plusieurs conditions.
+
+```
+mysql> SELECT * FROM users WHERE id=1 AND username='admin';
++----+----------+----------------------------------+
+| ID | username | password                         |
++----+----------+----------------------------------+
+|  1 | admin    | 21232f297a57a5a743894a0e4a801fc3 |
++----+----------+----------------------------------+
+1 row in set (0.00 sec)
+```
+
+__Exercice :__ Dans la table _accounts_ de la base de données _nowasp_. Faire une requête qui authentifie un utilisateur c'est à dire :
+
+* Renvoie des données si le nom d'utilisateur et le mot de passe sont bons (et correspondent au même utilisateur).
+* Ne renvoie pas de données, si le couple utilisateur mot de passe n'est pas valide.
+
+Pour cela, faire une requête _WHERE_ et _AND_ qui vérifie à la fois le nom d'utilisateur et le mot de passe.
