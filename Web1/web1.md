@@ -162,7 +162,7 @@ mysql> SELECT ID, username FROM users;
 2 rows in set (0.00 sec)
 ```
 
-Note : il n'est pas nécessaire de mettre `SELECT` et `FROM` en majuscule. Néanmoins il s'agit de la convention prise dans la plupart des cas de façon à distinguer les champs des opérateurs.
+Note : il n'est pas nécessaire de mettre `SELECT` et `FROM` en majuscule. Néanmoins il s'agit de la convention prise dans la plupart des cas de façon à distinguer les _champs_ des _opérateurs_.
 
 On peut utiliser le mot-clé `WHERE` pour filtrer les éléments sélectionnés.
 
@@ -177,3 +177,5 @@ mysql> SELECT password FROM users WHERE username = 'admin';
 ```
 
 __Exercice :__ Selectionner le nom de l'utilisateur avec l'ID 2.
+
+__Exercice 2:__Dans la base de données _sqlol_. Faire une requête qui trouve si l'utilisateur avec l'_id_ 2 est admin.
