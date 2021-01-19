@@ -318,3 +318,4 @@ SQL Query: SELECT * FROM users WHERE idusers=1 UNION SELECT NULL,NULL,NULL,NULL,
 L'application n'affiche plus les "User ID: 1" et autres données de la requête initiale (avant le `UNION`). On a donc bien pris le contrôle de ce qui est affiché avec l'opérateur `LIMIT 1,1`.
 
 ![L'application affiche nos NULL,NULL,NULL,... c'est à dire rien !](images/select_limit_nulls.png)
+
