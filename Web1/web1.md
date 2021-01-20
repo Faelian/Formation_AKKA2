@@ -383,7 +383,7 @@ URL : `http://192.168.56.101/owaspbricks/content-1/index.php?id=1+UNION+SELECT+p
 Félicitations, vous venez d'extraire des mot de passe d'une base de données en exploitant une injection SQL avec l'opérateur `UNION`.
 
 \newpage
-## Content 2 
+## Explication pour content 2 
 
 Même chose que pour l'exercice précédent sauf, qu'il est nécessaire d'ajouter un `'` après le texte pour réaliser l'injection.
 
@@ -404,6 +404,89 @@ SELECT * FROM users WHERE name='harry' ORDER BY 8;-- '
 +---------+-------+---------------------+---------------
 
 ```
+
+La suite est identique à l'exercice content1. On laissera jute le ```'``` en plus dans les requêtes.
+
+\newpage
+
+# Exploiter une injection SQL lorsqu'on ne connait pas le nom des tables et colonnes
+
+Dans certains cas, on arrive à deviner le nom des tables et des colonnes. Dans le cas de `SELECT username, password FROM users`, on a des noms assez classiques.\
+Mais que faire si on arrive pas à deviner ces identifiants, où que l'on souhaite extraire d'autres données de la base.
+
+La méthode ci-dessous sera illustrée avec l'exercice __content-3 de OWASP Bricks__.
+
+# Trouver la version de la base de données
+
+Mettons que l'on a une injection avec UNION où l'on arrive à les résultats de notre requête.
+
+![Notre 'aaaa' est réfléchit dans une injection avec UNION](images/content3-null.png)
+
+On va chercher à identifier la base de donnée utilisée par l'application web. La syntaxe qui donne la version est différente en fonction de la base de donnée.
+
+| Database type | Query |
+|---|---|
+Microsoft, MySQL  | SELECT @@version
+Oracle            | SELECT * FROM v$version
+PostgreSQL        | SELECT version()
+
+On pourra donc utiliser un `UNION SELECT @@version` pour tester s'il s'agit d'une DB MySQL ou Microsoft.
+
+![Identification de la version](images/identify_version.png)
+
+Le fait que `@@version` fonctionne nous indique qu'il s'agit soit d'une base de données _MySQL_, soit d'une base de données _Microsoft_ (_MsSQL_).\
+Étant donné que le système indique Ubuntu dans `5.1.41-3ubuntu12.6-log`. On conclut qu'il s'agit d'un MySQL.
+
+Les étapes suivantes sont différentes en fonction de la base de donnée. Nous allons ici faire le cas d'une base de données __MySQL__ (cas le plus courant).\
+Vous pouvez aller voir les sites suivants pour plus de détail sur comment identifier les tables et colonnes sur d'autres types de base de données :
+
+* [https://portswigger.net/web-security/sql-injection/examining-the-database](https://portswigger.net/web-security/sql-injection/examining-the-database)
+* [https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/SQL%20Injection](https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/SQL%20Injection)
+
+Les étapes suivantes sont basées sur [https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/SQL%20Injection/MySQL%20Injection.md#extract-database-with-information_schema](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/SQL%20Injection/MySQL%20Injection.md#extract-database-with-information_schema)
+
+## Lister les bases de données
+
+MySQL a une base de données spéciale qui contient le nom des _bases de données_, _tables_, et _colonnes_ des tables.\
+En faisant des requête sur cette dernière on peut récupérer toutes ces informations.
+
+Lister les bases de données gérées par MySQL se fait avec le requête suivante :
+
+```
+SELECT group_concat(0x7c,schema_name,0x7c) FROM information_schema.schemata;
+```
+
+Dans une injection SQL avec un `UNION`, cela donne :
+
+![Récupération des bases de données avec UNION](images/r%C3%A9cup%C3%A9ration_des_bdd.png)
+
+Soit l'injection SQL suivante :
+```
+username=tom'+UNION+SELECT+NULL,NULL,group_concat(0x7c,schema_name,0x7c),NULL,NULL,NULL,NULL,NULL+FROM+information_schema.schemata+LIMIT+1,1;--+&submit=Submit
+```
+
+## Lister les tables
+
+De la même manière, une fois que l'on a identifier une base de donnée, on peut en lister les tables.\
+Ici, la base qui nous intéresse est `bricks`.
+
+Lister les tables se fait avec la requête SQL suivante :
+```
+SELECT group_concat(0x7c,table_name,0x7c) FROM information_schema.tables WHERE table_schema='nom_de_la_table';
+```
+
+![Récupération des Tables](images/list_tables.png)
+
+Soit l'injection SQL suivante :
+```
+username=tom'+UNION+SELECT+NULL,NULL,group_concat(0x7c,table_name,0x7c),NULL,NULL,NULL,NULL,NULL+FROM+information_schema.tables+WHERE+table_schema='bricks'+LIMIT+1,1;--+&submit=Submit
+```
+
+La base de données `bricks` ne contient ici qu'une seule table : `users`.
+
+## Lister les colonnes
+
+
 
 ## Upload de fichier
 
