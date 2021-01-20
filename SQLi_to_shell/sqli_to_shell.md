@@ -227,3 +227,4 @@ Ici, on découvre les fonctionnalités suivantes :
 
 Dans un pentest professionnel. On utiliserait le scanner de _BurpSuite Pro_ à ce stade pour chercher des failles de sécurité.
 
+L'injection SQL se trouve au niveau du paramètre `id`.
