@@ -1,0 +1,16 @@
+# Nmap 7.60 scan initiated Wed Jan 20 12:14:43 2021 as: nmap -sV -sC -oN scan_tcp.nmap 192.168.56.112
+Nmap scan report for ubuntu32 (192.168.56.112)
+Host is up (0.00014s latency).
+Not shown: 998 closed ports
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 5.5p1 Debian 6+squeeze2 (protocol 2.0)
+| ssh-hostkey: 
+|   1024 18:53:14:47:58:80:c3:98:fd:39:f7:69:02:f9:46:79 (DSA)
+|_  2048 b2:ed:5b:ea:4d:9b:aa:b8:b5:2f:a0:37:86:44:22:aa (RSA)
+80/tcp open  http    Apache httpd 2.2.16 ((Debian))
+|_http-server-header: Apache/2.2.16 (Debian)
+|_http-title: My Photoblog - last picture
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Wed Jan 20 12:14:50 2021 -- 1 IP address (1 host up) scanned in 6.74 seconds

@@ -83,3 +83,80 @@ L'installation est terminée.
 
 S'agissant d'un Live CD. La machine démarrera à chaque fois sur le fichie ISO sans conserver les changement qui ont été effectués dessus.
 
+\newpage
+
+# Pentest
+
+Lorsqu'elle démarre. La machine vous donne un shell (avec un clavier QWERTY).\
+Vous pouvez utiliser la commande `ifconfig` pour trouver l'IP de la machine.
+
+![Trouver l'IP de la machine](images/ifconfig.png)
+
+## Scan de port
+
+La première chose à faire lorque l'on a une machine a tester est un scan de ports avec `nmap`. Vous pouvez faire cela avec votre __Kali Linux__.
+
+Pour un scan de port complet, rajouter l'option `-p-`.
+
+```
+nmap -sV -sC 192.168.56.112 -oN scan_tcp.nmap
+
+Starting Nmap 7.60 ( https://nmap.org ) at 2021-01-20 12:14 CET
+Nmap scan report for ubuntu32 (192.168.56.112)
+Host is up (0.00014s latency).
+Not shown: 998 closed ports
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 5.5p1 Debian 6+squeeze2 (protocol 2.0)
+| ssh-hostkey: 
+|   1024 18:53:14:47:58:80:c3:98:fd:39:f7:69:02:f9:46:79 (DSA)
+|_  2048 b2:ed:5b:ea:4d:9b:aa:b8:b5:2f:a0:37:86:44:22:aa (RSA)
+80/tcp open  http    Apache httpd 2.2.16 ((Debian))
+|_http-server-header: Apache/2.2.16 (Debian)
+|_http-title: My Photoblog - last picture
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 6.74 seconds
+```
+
+On a ici deux services : un serveur SSH port 22, et un serveur Web sur le port 80.
+
+Port | service
+-----|--------
+tcp/22 | SSH
+tcp/80 | HTTP (web)
+
+## HTTP : tcp/80
+
+## Énumération
+
+Lorsque l'on a un serveur web, on va systématiquement lancer quelques scans.
+
+### Nikto
+
+Nikto est un scanner web un peu ancien, qui remonte souvent des faux positifs. Il peut néanmoins avoir quelques informations utiles.
+
+Sous Kali, nikto se lance avec `nikto -h ip_cible`.\
+On peut stocker les résultats un `tee`.
+
+```bash
+$ nikto -h 192.168.56.112 | tee scan_nikto.txt
+
+- Nikto v2.1.6
+---------------------------------------------------------------------------
++ Target IP:          192.168.56.112
++ Target Hostname:    192.168.56.112
++ Target Port:        80
++ Start Time:         2021-01-20 12:23:28 (GMT1)
+---------------------------------------------------------------------------
++ Server: Apache/2.2.16 (Debian)
++ Retrieved x-powered-by header: PHP/5.3.3-7+squeeze14
++ The anti-clickjacking X-Frame-Options header is not present.
+...
+
+```
+
+Il ne nous remonte ici pas grand chose d'intéressant si ce n'est des erreurs de configuration.
+
+### Gobuster
+
