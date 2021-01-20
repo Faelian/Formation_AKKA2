@@ -324,3 +324,71 @@ Identifiants :
 ```
 admin:8efe310f9ab3efeae8d410a8e0166eb2
 ```
+\newpage
+
+# Casser le hash
+
+Il s'agit ici d'un hash connu, et vous pouvez trouver le clair sur internet. Par principe, voici la démarche complète pour le casser.
+
+## Identifier le hash
+
+On peut utiliser l'outil `hash-identifier` présent par défault sur Kali pour __identifier le type du hash__.
+
+```bash
+$ hash-identifier 8efe310f9ab3efeae8d410a8e0166eb2
+[ascii art]
+
+Possible Hashs:
+[+] MD5
+[+] Domain Cached Credentials - MD4(MD4(($pass)).(strtolower($username)))
+
+Least Possible Hashs:
+[+] RAdmin v2.x
+...
+```
+
+L'outil nous indique qu'il s'agit vraisemblablement d'un hash MD5.
+
+## Casser le hash avec Hashcat
+
+En regardant l'aide de `hashcat` avec `hashcat -h | less`. On identifie que le type MD5 se donne avec l'option `-m 0`.
+
+Sur kali il est souvent nécessaire d
+
+```
+$ hashcat -h | less
+[...]
+      # | Name                                             | Category
+  ======+==================================================+========
+    900 | MD4                                              | Raw Hash
+      0 | MD5                                              | Raw Hash
+    100 | SHA1                                             | Raw Hash
+   1300 | SHA2-224                                         | Raw Hash
+[...]
+```
+
+On crée un fichier `admin.hash` dans lequel on écrit notre hash. Et on lance `hashcat` de la façon suivante :
+
+```bash
+$ hashcat --force -m 0 admin.hash /usr/share/wordlists/rockyou.txt
+hashcat (v6.1.1) starting...
+
+[...]
+Dictionary cache hit:
+* Filename..: /usr/share/wordlists/rockyou.txt
+* Passwords.: 14344385
+* Bytes.....: 139921507
+* Keyspace..: 14344385
+
+8efe310f9ab3efeae8d410a8e0166eb2:P4ssw0rd        
+
+[...]
+```
+__rockyou.txt__ est une liste commune de mot de passe. Elle est présente par défaut sur kali à `/usr/share/wordlists/rockyou.txt.gz`. Mais elle est compressée, et il est nécessaire de l'extraire.
+
+Un fois le hash cassé une fois. On peut le retrouver avec `hashcat --show hashfile`.
+
+```
+$ hashcat --show admin.hash                                       
+8efe310f9ab3efeae8d410a8e0166eb2:P4ssw0rd
+```
