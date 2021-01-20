@@ -236,4 +236,8 @@ C'est probablement qu'il y a une injection SQL au niveau du paramètre `id` !
 
 On peut utiliser le _Repeater_ de Burp pour tester ce paramètre.
 
-Le requête SQL prend directement le paramètre.
+Afin de faciliter les tests, on peut rechercher `secondary-navigation` dans la partie _Response_, et cocher _Auto-scroll to match when text changes_.
+
+![Configuration de l'auto-scroll dans le Repeater](images/autoscroll.png)
+
+## Trouver le nombre de colonnes
