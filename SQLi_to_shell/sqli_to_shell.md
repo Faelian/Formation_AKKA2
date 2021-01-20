@@ -240,4 +240,18 @@ Afin de faciliter les tests, on peut rechercher `secondary-navigation` dans la p
 
 ![Configuration de l'auto-scroll dans le Repeater](images/autoscroll.png)
 
+On va commencer par ajouter notre cher ';--+' pour commenter la fin de la requête. Et on constate que la requête fonctionne toujours
+
+![Ajout de ;--+ à la fin de la requête](images/added_--.png)
+
 ## Trouver le nombre de colonnes
+
+On va chercher ici à réaliser une injection avec l'opérateur `UNION`.\
+On va tout d'abord chercher à déterminer le nombre de colonnes.
+
+La requête __échoue lorsque l'on arrive à 5 colonnes__. C'est donc qu'__il n'y en a que 4__.
+
+URL : [http://192.168.56.112/cat.php?id=2+ORDER+BY+5;--+](http://192.168.56.112/cat.php?id=2+ORDER+BY+5;--+)
+
+![La requête échoue avec ORDER BY 5](images/order_by_5.png)
+
