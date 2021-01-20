@@ -265,6 +265,20 @@ Ajouter le `UNION SELECT NULL` ne produit par d'erreur.
 
 ![](images/union_null.png)
 
+## LIMIT 1,1
+
 Lorsque l'on ajoute `LIMIT 1,1` dans notre requête. Plusieurs éléments disparaissent.
 
 URL : __[http://192.168.56.112/cat.php?id=2+UNION+SELECT+NULL,NULL,NULL,NULL+LIMIT+1,1;--+](http://192.168.56.112/cat.php?id=2+UNION+SELECT+NULL,NULL,NULL,NULL+LIMIT+1,1;--+)__
+
+![Plusieurs éléments disparaissent lorsque l'on ajoute LIMIT 1,1](images/limit_1-1.png)
+
+On peut également utiliser le _Comparer_ de Burp (clic droit, _send to Comparer_) pour examiner les différences entre les réponses.
+
+![Différence avec LIMIT 1,1 dans le comparer](images/comparer.png)
+
+## Réfléchir les éléments
+
+Lorsque l'on remplace nos `NULL` par du texte. On peut voir que la 2ème et 3ème colonnes sont réfléchies dans la page web.
+
+![On voit nos 'bbb' et 'ccc' dans la répones Web](images/reflected_sqli.png)
