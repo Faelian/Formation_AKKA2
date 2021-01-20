@@ -228,3 +228,12 @@ Ici, on découvre les fonctionnalités suivantes :
 Dans un pentest professionnel. On utiliserait le scanner de _BurpSuite Pro_ à ce stade pour chercher des failles de sécurité.
 
 L'injection SQL se trouve au niveau du paramètre `id`.
+
+## Injection SQL
+
+On constate que `http://192.168.56.112/cat.php?id=3-1` nous donne la même chose que la page ``http://192.168.56.112/cat.php?id=2`.\
+C'est probablement qu'il y a une injection SQL au niveau du paramètre `id` !
+
+On peut utiliser le _Repeater_ de Burp pour tester ce paramètre.
+
+Le requête SQL prend directement le paramètre.
