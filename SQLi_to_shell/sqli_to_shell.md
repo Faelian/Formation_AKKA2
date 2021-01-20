@@ -394,3 +394,12 @@ Un fois le hash cassé une fois. On peut le retrouver avec `hashcat --show hashf
 $ hashcat --show admin.hash                                       
 8efe310f9ab3efeae8d410a8e0166eb2:P4ssw0rd
 ```
+
+\newpage
+
+# Upload de fichier
+
+Une fois le mot de passe de l'administrateur obtenu. On peut retourner sur la page d'administration de l'application. Et s'authentifier avec __`admin:P4ssw0rd`__.
+
+![Page d'admin : http://192.168.56.112/admin/](image/admin_page.png)
+
