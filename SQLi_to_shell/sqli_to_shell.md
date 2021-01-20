@@ -401,5 +401,5 @@ $ hashcat --show admin.hash
 
 Une fois le mot de passe de l'administrateur obtenu. On peut retourner sur la page d'administration de l'application. Et s'authentifier avec __`admin:P4ssw0rd`__.
 
-![Page d'admin : http://192.168.56.112/admin/](image/admin_page.png)
+![Page d'admin : http://192.168.56.112/admin/](images/admin_page.png)
 
