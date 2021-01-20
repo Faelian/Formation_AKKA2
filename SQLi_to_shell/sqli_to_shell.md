@@ -92,6 +92,10 @@ Vous pouvez utiliser la commande `ifconfig` pour trouver l'IP de la machine.
 
 ![Trouver l'IP de la machine](images/ifconfig.png)
 
+Si votre machine n'a pas d'adresse IP. Vous pouvez en demander une à Virtualbox avec la commande
+
+```sudo dhclient eth0```
+
 ## Scan de port
 
 La première chose à faire lorque l'on a une machine a tester est un scan de ports avec `nmap`. Vous pouvez faire cela avec votre __Kali Linux__.
@@ -208,5 +212,18 @@ Dans notre cas, on va notamment être intéressé par la page `admin` :\
 [http://192.168.56.112/admin/](http://192.168.56.112/admin/).
 
 
+# Test de l'application Web
 
+Lorsque l'on teste une application Web, on commence par en faire un tour, découvrir les différentes fonctionnalitées.
+
+Ici, on découvre les fonctionnalités suivantes :
+
+* Différentes images, identifiées par `id=1`, `id=2`, etc
+* Une page d'administration (`http://ip/admin/`) qui demande un utilisateur / mot de passe
+
+![Page avec des images, notez le id=1](images/page_images.png)
+
+![Page d'administration](image/page_admin.png)
+
+Dans un pentest professionnel. On utiliserait le scanner de _BurpSuite Pro_ à ce stade pour chercher des failles de sécurité.
 
