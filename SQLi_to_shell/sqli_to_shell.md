@@ -351,9 +351,8 @@ L'outil nous indique qu'il s'agit vraisemblablement d'un hash MD5.
 
 ## Casser le hash avec Hashcat
 
-En regardant l'aide de `hashcat` avec `hashcat -h | less`. On identifie que le type MD5 se donne avec l'option `-m 0`.
-
-Sur kali il est souvent nécessaire d
+En regardant l'__aide__ de `hashcat` avec __`hashcat -h | less`__. On identifie que le type MD5 se donne avec l'option __`-m 0`__.\
+Dans une machine virtuelle, il est généralement nécessaire de rajouter l'option __`--force`__ lorsque l'on lance `hashcat`.
 
 ```
 $ hashcat -h | less
@@ -370,6 +369,9 @@ $ hashcat -h | less
 On crée un fichier `admin.hash` dans lequel on écrit notre hash. Et on lance `hashcat` de la façon suivante :
 
 ```bash
+$ cat admin.hash     
+8efe310f9ab3efeae8d410a8e0166eb2
+
 $ hashcat --force -m 0 admin.hash /usr/share/wordlists/rockyou.txt
 hashcat (v6.1.1) starting...
 
