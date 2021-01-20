@@ -126,7 +126,7 @@ Port | service
 tcp/22 | SSH
 tcp/80 | HTTP (web)
 
-## HTTP : tcp/80
+## HTTP - TCP/80 :
 
 ## Énumération
 
@@ -159,4 +159,54 @@ $ nikto -h 192.168.56.112 | tee scan_nikto.txt
 Il ne nous remonte ici pas grand chose d'intéressant si ce n'est des erreurs de configuration.
 
 ### Gobuster
+
+On va généralement lancer un Gobuster pour découvrir d'autres fichiers sur le serveur web.
+
+Si il n'est pas présent, installez le sur kali avec
+```
+sudo apt install gobuster
+```
+
+La syntaxe de __`gobuster`__ est la suivante :
+```
+gobuster dir -u http://ip -w wordlist -o fichier_de_sortie -x extensions_à_ajouter
+```
+
+```
+$ gobuster dir -u http://192.168.56.112 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -x txt,php -o gobuster_med.txt
+===============================================================
+Gobuster v3.0.1
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@_FireFart_)
+===============================================================
+[+] Url:            http://192.168.56.112
+[+] Threads:        10
+[+] Wordlist:       /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
+[+] Status codes:   200,204,301,302,307,401,403
+[+] User Agent:     gobuster/3.0.1
+[+] Extensions:     php,txt
+[+] Timeout:        10s
+===============================================================
+2021/01/20 13:19:57 Starting gobuster
+===============================================================
+/images (Status: 301)
+/index (Status: 200)
+/index.php (Status: 200)
+/header (Status: 200)
+/header.php (Status: 200)
+/admin (Status: 301)
+/footer (Status: 200)
+/footer.php (Status: 200)
+/show (Status: 200)
+/show.php (Status: 200)
+/all (Status: 200)
+/all.php (Status: 200)
+/css (Status: 301)
+...
+```
+
+Dans notre cas, on va notamment être intéressé par la page `admin` :\
+[http://192.168.56.112/admin/](http://192.168.56.112/admin/).
+
+
+
 
