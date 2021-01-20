@@ -255,3 +255,16 @@ URL : [http://192.168.56.112/cat.php?id=2+ORDER+BY+5;--+](http://192.168.56.112/
 
 ![La requête échoue avec ORDER BY 5](images/order_by_5.png)
 
+## UNION SELECT NULL
+
+Maintenant que l'on a déterminer le nombre de colonnes. On va utiliser la syntaxe avec `UNION` pour extraire des données de la base.
+
+Comme on a 4 colonnes, on peut utiliser `UNION SELECT NULL,NULL,NULL,NULL`.
+
+Ajouter le `UNION SELECT NULL` ne produit par d'erreur.
+
+![](images/union_null.png)
+
+Lorsque l'on ajoute `LIMIT 1,1` dans notre requête. Plusieurs éléments disparaissent.
+
+URL : __[http://192.168.56.112/cat.php?id=2+UNION+SELECT+NULL,NULL,NULL,NULL+LIMIT+1,1;--+](http://192.168.56.112/cat.php?id=2+UNION+SELECT+NULL,NULL,NULL,NULL+LIMIT+1,1;--+)__
