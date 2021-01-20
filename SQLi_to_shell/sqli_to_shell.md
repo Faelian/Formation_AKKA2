@@ -223,7 +223,7 @@ Ici, on découvre les fonctionnalités suivantes :
 
 ![Page avec des images, notez le id=1](images/page_images.png)
 
-![Page d'administration](image/page_admin.png)
+![Page d'administration](images/page_admin.png)
 
 Dans un pentest professionnel. On utiliserait le scanner de _BurpSuite Pro_ à ce stade pour chercher des failles de sécurité.
 
