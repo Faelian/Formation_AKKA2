@@ -584,7 +584,7 @@ chmod 600 ssh_www-data
 
 On peut ensuite se connecter en SSH avec notre clé privée.
 ```bash
-ssh -i www-data www-data@192.168.56.112
+ssh -i ssh_www-data www-data@192.168.56.112
 ```
 
 # Élévation de privilèges
