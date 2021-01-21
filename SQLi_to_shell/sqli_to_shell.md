@@ -564,7 +564,7 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDMVV0TSRvPqsx4WBCup/MaVa4DCgTb1l1Xy3+nrgrZ
 ```
 
 
-Sur la __machine "From SQLi to Shell"__, on va créer un dossier `.ssh` dans le HOME de www-data `/var/www/`
+Sur la __machine "From SQLi to Shell"__, on va créer un dossier `.ssh` dans le HOME de _www-data_ `/var/www/`
 
 ```bash
 $ mkdir -p /var/www/.ssh/
@@ -587,3 +587,31 @@ On peut ensuite se connecter en SSH avec notre clé privée.
 ```bash
 ssh -i www-data www-data@192.168.56.112
 ```
+
+# Élévation de privilèges
+
+On a pour le moment un shell avec l'utilisateur `www-data`. On va chercher à élever nos privilèges pour devenir `root`.
+
+Pour cela on peut utiliser un script d'énumération tel que __LinPEAS__ pour découvrir des vulnérabilités qui nous permetteraient d'élever nos privilèges.
+
+LinPEAS se trouve sur le déport suivant : __[https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite](https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite)__.
+
+Vous pouvez le téléchager sur Kali, puis utiliser `sshfs` ou `scp` pour copier le fichier sur la machine _SQLi to Shell_.
+
+```bash
+scp -i ssh_www-data linpeas.sh www-data@192.168.56.112:/tmp/
+
+linpeas.sh                     100%  293KB  57.1MB/s   00:00
+```
+
+On peut ensuite aller la _SQLi to shell_ et exécuter le script d'énumération.\
+Je vais ici utiliser la commande `tee` pour stocker les résultats du script dans un fichier.
+
+Dans le dossier `/tmp`:
+```
+$ bash linpeas.sh | tee linpeas.txt
+
+linpeas v2.9.4 by carlospolop
+[...]
+```
+
