@@ -660,3 +660,4 @@ Le dernier listé `dirty.c` est assez fiable.
 
 ![Repo github contenant des exploits kernel](images/dirtycow_github.png)
 
+Néanmoins, la machine distante étant en 32 bit comme l'indique `i686` dans la commande `uname -a`. Il est nécessaire de compiler l'exploit en 32 bits.
