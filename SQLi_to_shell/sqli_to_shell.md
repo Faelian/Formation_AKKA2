@@ -576,8 +576,7 @@ On peut ensuite ajouter notre __clé publique__ au __fichier des clés autorisé
 echo -n 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDMVV0TSRvPqsx4WBCup/MaVa4DCgTb1l1Xy3+nrgrZMo1Q/t8iblL6PHOvC4s2uP6aOPjVEOfI2qDgvZfEfG+J6g2B1GXLZBtnfyk1bJGY7h2dO1yJg0hHqZ91NcEsJ0Qv3Lq7JxoI6NAmiL6vPil69noaMzgSedOswxn247naRLVPGpBCL5f0R+TpRuJ6tF1Xtc++II6aL/zUME7aJR9qxv/9AoDjwE7JYLmAJt7LRp9ZjUBGm53cIuLrnHf4hkNVO2lxA9Atmvm9Zyiwdk55XLpTQp3Pg1Q4Hu/QSR2G6ZFQXEbCUqtlx/pXTfHFoSYixSn1dj4WUgCtVhHhwhhJGiJ70n/Cj37U3JbssSKlaNqa1hPVWxDgT2C2nyZtDIf83qwUjenvpQoPTCgas7p8ef0PF76eGah9TQeAsysjpvLtHBUjsBmZdDmZI+vIkJ0lKk08elIiMCa77NcPO3vIgBnNL29M8Qo+XFMrS8OhZdLRLM1qen5JwoMexyaKhpc= olivier@kali' >> /var/www/.ssh/authorized_keys
 ```
 
-On peut ensuite se connecter avec notre __clé privée SSH__.
-
+On peut maintenant __se connecter depuis la Kali__ avec notre __clé privée SSH__.
 D'abord on doit changer les droits de la clé privée.
 ```bash
 chmod 600 ssh_www-data
