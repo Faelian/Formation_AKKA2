@@ -618,3 +618,45 @@ linpeas v2.9.4 by carlospolop
 On peut ouvrir les fichier `linpeas.txt` avec la couleurs en utilisant la commande `less -R`
 
 ## Utilisation d'un exploit kernel
+
+Le noyau Linux utilisé est la version __2.6.32-5__. (On peut également le voir avec la commande `uname -a`).
+
+Il existe plusieurs vulnérablitiés pour cette version du noyau Linux. Si on cherche avec un outil comme __Linux Exploit Suggester 2__, il va nous en lister plusieurs.
+
+__[https://github.com/jondonas/linux-exploit-suggester-2](https://github.com/jondonas/linux-exploit-suggester-2)__
+
+```
+$ perl linux-exploit-suggester-2.pl -k 2.6.32  
+                                                                               
+  #############################
+    Linux Exploit Suggester 2
+  #############################                                                
+                                       
+  Local Kernel: 2.6.32
+  Searching 72 exploits...                                                     
+                                       
+  Possible Exploits                                                            
+  [1] american-sign-language                                                   
+      CVE-2010-4347
+      Source: http://www.securityfocus.com/bid/45408
+  [2] can_bcm
+      CVE-2010-2959
+      Source: http://www.exploit-db.com/exploits/14814
+  [3] dirty_cow
+      CVE-2016-5195
+      Source: http://www.exploit-db.com/exploits/40616
+
+[...]
+```
+
+Dans notre cas, on va utiliser DirtyCow qui est un exploit très documenté et fiable.
+
+Vous pouvez aller voir [https://dirtycow.ninja/](https://dirtycow.ninja/) pour plus de détails sur la vulnérabilité.\
+Le github associté liste de nombreux exploits :
+__[https://github.com/dirtycow/dirtycow.github.io/wiki/PoCs](https://github.com/dirtycow/dirtycow.github.io/wiki/PoCs)__
+
+
+Le dernier listé `dirty.c` est assez fiable.
+
+![Repo github contenant des exploits kernel](images/dirtycow_github.png)
+
