@@ -615,3 +615,5 @@ linpeas v2.9.4 by carlospolop
 [...]
 ```
 
+On peut ouvrir les fichier `linpeas.txt` avec la couleurs en utilisant la commande `less -R`
+
