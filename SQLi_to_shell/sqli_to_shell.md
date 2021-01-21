@@ -587,27 +587,34 @@ On peut ensuite se connecter en SSH avec notre clé privée.
 ssh -i ssh_www-data www-data@192.168.56.112
 ```
 
+\newpage
+
 # Élévation de privilèges
 
-On a pour le moment un shell avec l'utilisateur `www-data`. On va chercher à élever nos privilèges pour devenir `root`.
+On a pour le moment un shell avec l'utilisateur `www-data`. On va __chercher à élever nos privilèges__ pour devenir `root`.
 
-Pour cela on peut utiliser un script d'énumération tel que __LinPEAS__ pour découvrir des vulnérabilités qui nous permetteraient d'élever nos privilèges.
+## Énumération / Recherche de vulnérabilités locale
 
-LinPEAS se trouve sur le déport suivant : __[https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite](https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite)__.
+Pour cela on peut utiliser un script d'énumération tel que __LinPEAS__ pour découvrir des vulnérabilités qui nous permetteraient d'élever nos privilèges. Il existe d'autres scripts comme `unixprivesc` ou `LinEnum.sh`.
 
-Vous pouvez le téléchager sur Kali, puis utiliser `sshfs` ou `scp` pour copier le fichier sur la machine _SQLi to Shell_.
+LinPEAS se trouve sur le déport suivant :\
+__[https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite](https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite)__.
+
+Vous pouvez le téléchager sur Kali, puis utiliser `sshfs` ou `scp` pour copier le fichier sur la machine _From SQLi to Shell_.
 
 ```bash
-scp -i ssh_www-data linpeas.sh www-data@192.168.56.112:/tmp/
+$ scp -i ssh_www-data linpeas.sh www-data@192.168.56.112:/tmp/
 
 linpeas.sh                     100%  293KB  57.1MB/s   00:00
 ```
 
-On peut ensuite aller la _SQLi to shell_ et exécuter le script d'énumération.\
-Je vais ici utiliser la commande `tee` pour stocker les résultats du script dans un fichier.
+On se connecte ensuite sur la machine _From SQLi to shell_ et on exécute le script d'énumération. J'utilise ici la commande `tee` pour stocker les résultats dans un fichier.
 
-Dans le dossier `/tmp`:
+Sur la machine _From SLQi to Shell_ dans le dossier `/tmp/`:
 ```
+$ ls
+f linpeas.sh
+
 $ bash linpeas.sh | tee linpeas.txt
 
 linpeas v2.9.4 by carlospolop
@@ -615,6 +622,10 @@ linpeas v2.9.4 by carlospolop
 ```
 
 On peut ouvrir les fichier `linpeas.txt` avec la couleurs en utilisant la commande `less -R`
+
+Dans le cas présent, __LinPEAS ne nous indique pas d'erreur de configuration__. On va __regarder s'il existe des vulnérabilités pour les logiciels utilisées__.
+
+\newpage
 
 ## Utilisation d'un exploit kernel
 
@@ -660,3 +671,44 @@ Le dernier listé `dirty.c` est assez fiable.
 ![Repo github contenant des exploits kernel](images/dirtycow_github.png)
 
 Néanmoins, la machine distante étant en 32 bit comme l'indique `i686` dans la commande `uname -a`. Il est nécessaire de compiler l'exploit en 32 bits.
+
+La __solution la plus simple__ est d'__utiliser une machine 32 bit__ avec un __noyau 2.6__ comme la machine __"OWASP Broken Web Apps"__ pour __compiler__ l'exploit.
+
+------------------------
+
+### Compiler l'exploit sur Kali Linux
+
+__Cette section ne fonctionne pas. J'essaierai de la mettre à jour ultérieurement__.
+
+On peut compiler l'exploit sur kali, puis le déposer sur la machine From SQLi to Shell.
+
+Pour compiler l'exploit pour un système 32 bits depuis un système 64 bits. On doit installer les bibliothèques au format 32 bit.
+
+```sh
+sudo dpkg --add-architecture i386
+sudo apt-get update
+sudo apt-get install libc6:i386 libstdc++6:i386
+```
+
+On installe ensuite sur kali la biliothèque lcrypt qui est utilisée par le programme en 32 bit :
+```sh
+sudo apt-get install libcrypt-dev:i386
+```
+
+Et on peut enfin compiler le programme avec `gcc` et les __options précisées dans l'exploit__ (le fichier `dirty.c`).\
+On ajoute également les options __`-m32`__ pour compiler en 32 bits, et __`-static`__ pour ne pas dépendre des biliothèques présentes sur le système distant.
+
+```bash
+gcc -m32 -static -pthread dirty.c -o dirty -lcrypt
+```
+----------
+
+### Utiliser l'exploit
+
+On peut ensuite uploader notre exploit `dirty` sur la machine "From SQLi to Shell".
+
+```
+scp -i ssh_www-data dirty www-data@192.168.56.112:/tmp/
+```
+
+
