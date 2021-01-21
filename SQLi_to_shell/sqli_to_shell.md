@@ -531,7 +531,7 @@ On peut se connecter en SSH __sans mot de passe__ en utilisant une clé SSH. Il 
 
 ----------------------
 
-Pour créer la clé sur kali (appuyer sur `Enter` pour ne pas donner de passphrase):
+Pour créer la clé __sur kali__ (appuyer sur `Enter` pour ne pas donner de passphrase):
 ```bash
 $ ssh-keygen -f ssh_www-data                       
 
