@@ -450,7 +450,7 @@ On peut simplement __ouvrir un port en écoute__ avec __`netcat`__ sur Kali.
 nc -lvnp 9001
 ```
 
-On adapte ensuite la commande à notre addresse IP et port. Puis on l'exécute (avec un encodage URL) via Burp et notre fichier `shell.php3` uploadé précédement.
+__On adapte ensuite la commande à notre addresse IP et port__. Puis on l'exécute (avec un encodage URL) via Burp et notre fichier `shell.php3` uploadé précédement.
 
 ![Obtenir un reverse shell avec Burp](./images/rshell.png)
 
@@ -617,3 +617,4 @@ linpeas v2.9.4 by carlospolop
 
 On peut ouvrir les fichier `linpeas.txt` avec la couleurs en utilisant la commande `less -R`
 
+## Utilisation d'un exploit kernel
